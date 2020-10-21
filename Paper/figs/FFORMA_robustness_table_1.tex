@@ -1,0 +1,25 @@
+% latex table generated in R 3.6.1 by xtable 1.8-4 package
+% Tue Jan 14 09:09:15 2020
+\begin{table}[ht]
+\caption{United States macroeconomic data forecast combination results ---
+one-time model estimation}
+\label{tab:fformaRobustness_1}
+\centerline{
+\begin{tabular}{ccccccccc}
+  \hline
+  \hline
+  Combination Technique  & \multicolumn{4}{c}{Employment} & \multicolumn{4}{c}{Industrial Production}\\
+  \cmidrule(lr){2-5}\cmidrule(lr){6-9}
+  & H = 1 & H = 6 & H = 12 & H = 24 & H = 1 & H = 6 & H = 12 & H = 24 \\
+  \hline
+  %Median Forecast & 0.86$^\star$ & 0.83$^\star$ & 0.89$^\star$ & 0.89$^\circ$ & 0.99 & 0.97 & 0.92$^\circ$ & 0.9$^\star$\\ 
+  peLasso & 2.13  & 1.89 & 1.46 & 1.2 & 1.19 &  1.29 & 0.96 & 1.03 \\ 
+  Lasso & 2.2 & 1.9 & 2.15 & 2.28 & 1.18 & 1.29 & 0.97 & 0.97 \\ 
+  Random Forest & 1.12 & 0.93 & 1.45 & 1.19 & 1.11 & 1.22 & 1.05 & 1.04  \\ 
+  Boosted Tree & 1.78 & 1.07 & 1.61 & 1.36 & 1.07 & 1.16 & 1.16 & 1.19  \\ 
+  FFORMA & 1.24 & 0.82 & 0.79 & 0.67$^\circ$ & 0.49$^\star$ & 0.28$^\star$ & 0.29$^\star$ & 0.30$^\star$ \\
+  \hline
+  \hline
+\end{tabular}}
+\caption*{Notes: forecast performance is reported as the ratio of the given forecast combination method's RMSE to the mean forecast's RMSE, such that a ratio less than one signals a forecast performance better than using uniform weights. $^\odot$, $^\circ$, $^\star$ denote \cite{DM1995} statistics significant at the ten-percent, five-percent, and one-percent confidence level, respectively, testing that the given forecast combination technique improves upon using uniform weights. Machines are trained on forecast errors from 1970 through 1979, and forecast combinations from 1980 through 2019 are evaluated.}
+\end{table}
