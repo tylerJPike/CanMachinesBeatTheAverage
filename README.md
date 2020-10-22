@@ -30,4 +30,4 @@ Additionally, we provide our pre-trained [FFORMA](./Data/Models) model, but one 
 ## Related work
 Related time series forecasting examples with these techniques:
 1. Forecasting country- and state-level covid-19 infections and deaths with FFORMA [\[kaggle\]](https://www.kaggle.com/tylerpike/covid-19-forecasting-fforma)
-2. Forecasting walmart store-level product sales in the M5 copmetition [\[kaggle\]]()
+2. Forecasting walmart store-level product sales in the M5 copmetition [\[kaggle\]](https://www.kaggle.com/tylerpike/m5-forecasting-fforma)
