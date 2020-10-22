@@ -8,7 +8,7 @@ Abstract: Yes. This paper documents the benefits of combining forecasts using we
 
 ## Run instructions
 Everything needed to run the experiments and appendix material of the paper should be included in this repo. All one needs to do to replicate the work is:   
-1. The required directory sturcture should be pulled with the project. However, if you need to re-instantiate output directories that begin empty, run [set_up.sh](./Scripts/set) (if in unix).
+1. The required directory structure should be pulled with the project. However, if you need to re-instantiate output directories that begin empty, run [set_up.sh](./Scripts/set) (if in unix).
 2. Open [nonLinear_master.R](./Scripts/nonLinear_master.R), which will act as the control board for all experiments, and  
     a. set the working directory  
     b. ensure you have all required packages installed, listed at the top of the script, excluding policyPlot, an FRB specific charting package  
