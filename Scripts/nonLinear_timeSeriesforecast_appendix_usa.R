@@ -1,6 +1,5 @@
 # File: nonLinear_metaLearner_functions_v0.R
 # Author: Tyler Pike
-# Section: MA-MFA
 # Date: 10/1/2019
 # Note(s): Create US forecasting appendix
 

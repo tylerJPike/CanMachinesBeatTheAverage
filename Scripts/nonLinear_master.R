@@ -1,14 +1,13 @@
-# File: nonLinear_master_wrapper_v0.R
+# File: nonLinear_master.R
 # Author: Tyler Pike
-# Section: MA-MFA
 # Date: 7/30/2019
-# Note(s): Master script to set commong experiment enviroment and control what scripts are run
+# Note(s): Master script to set common experiment enviroment and control what scripts are run
 
 #reset space 
 rm(list = ls())
 
 #set working directory 
-setwd('/scratch/m1tjp01/Paco/Nonlinear/ForecastCombination/')
+setwd('~/Research/CanMachinesBeatTheAverage/')
 
 #load in libraries
 library(policyPlot)  # charting (FRB specific library)
@@ -31,7 +30,7 @@ version = '5'
 
 # declare which experiments to run 
 # USA variables
-createTSmodels_usa   = FALSE
+createTSmodels_usa   = TRUE
 createFFORMA_usa     = FALSE
 createCombo_usa      = FALSE
 createAnalysis_usa   = FALSE

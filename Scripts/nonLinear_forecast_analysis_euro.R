@@ -1,6 +1,5 @@
 # File: nonLinear_forecast_analyis_euro
 # Author: Tyler Pike
-# Section: MA-MFA
 # Date: 10/1/2019
 # Note(s): Create Euro forecast chart and results comparison table
 

@@ -1,6 +1,5 @@
 # File: nonLinear_forecast_analysis_usa.R
 # Author: Tyler Pike
-# Section: MA-MFA
 # Date: 10/1/2019
 # Note(s): Create USA forecast chart and results comparison table
 

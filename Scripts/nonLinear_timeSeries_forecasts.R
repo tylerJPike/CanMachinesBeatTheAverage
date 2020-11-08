@@ -1,6 +1,5 @@
 # File: nonLinear_timeSeries_forecasts_v0.R
 # Author: Tyler Pike
-# Section: MA-MFA
 # Date: 7/30/2019
 # Note(s): Create time series forecasts for US macro series
 
@@ -124,29 +123,35 @@ generateTSForecats = function(target, Horizon, frequency, startDate = '1970-03-0
 #----------------------------------------------------
 if(generateForecasts == T){
   # set up parallel backend 
-  registerDoParallel(25)
-
+  n = parallel::detectCores()
+  cl =  parallel::makeCluster(n-2)
+  doParallel::registerDoParallel(cl)
+  
+  # package dependencies
+  libraries = 
+    c('forecast', 'caret', 'glmnet', 'pROC','tsfeatures','readxl','tidyverse','lubridate','doParallel', 'foreach')
+  
   # # generate all quarterly TS forecasts
    Targets = c('p', 'rgdp')
    Horizons = c(1,2,4,8)
-   foreach(i = 1:length(Targets), .combine = rbind) %:%
-     foreach(j = 1:length(Horizons), .combine = rbind) %dopar%
+   foreach(i = 1:length(Targets), .combine = rbind, .packages = libraries) %:%
+     foreach(j = 1:length(Horizons), .combine = rbind, .packages = libraries) %dopar%
        generateTSForecats(target = Targets[i], Horizon = Horizons[j], freq = 'quarterly')
    
-  # # generate all monthly TS forecasts
+  # generate all monthly TS forecasts
    Targets = c('ipt','emp')
    Horizons = c(1,6,12,24)
-   foreach(i = 1:length(Targets), .combine = rbind) %:%
-     foreach(j = 1:length(Horizons), .combine = rbind) %dopar%
+   foreach(i = 1:length(Targets), .combine = rbind, .packages = libraries) %:%
+     foreach(j = 1:length(Horizons), .combine = rbind, .packages = libraries) %dopar%
        generateTSForecats(target = Targets[i], Horizon = Horizons[j], freq = 'monthly')
    
   # generate all weekly TS forecasts
    Targets = c('treas','oil')
    Horizons = c(1,4,8,12)
-   foreach(i = 1:length(Targets), .combine = rbind) %:%
-     foreach(j = 1:length(Horizons), .combine = rbind) %dopar%
+   foreach(i = 1:length(Targets), .combine = rbind, .packages = libraries) %:%
+     foreach(j = 1:length(Horizons), .combine = rbind, .packages = libraries) %dopar%
      generateTSForecats(target = Targets[i], Horizon = Horizons[j], freq = 'weekly')
 
   # turn off parallel backend 
-  stopImplicitCluster()
+   doParallel::stopImplicitCluster()
 }

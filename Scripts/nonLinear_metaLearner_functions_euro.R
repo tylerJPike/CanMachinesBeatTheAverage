@@ -1,6 +1,5 @@
 # File: nonLinear_metaLearner_functions_v0.R
 # Author: Tyler Pike
-# Section: MA-MFA
 # Date: 7/30/2019
 # Note(s):  Create forecast combinations for Eurozone macro series
 
@@ -220,16 +219,22 @@ generateForecastWeights = function(target, Engine, Horizon,
 #----------------------------------------------------
 if(generateWeights == T){
   
-  # set up parallel backend
-  doParallel::registerDoParallel(parallel::detectCores() - 5)
+  # set up parallel backend 
+  n = parallel::detectCores()
+  cl =  parallel::makeCluster(n-2)
+  doParallel::registerDoParallel(cl)
+  
+  # package dependencies
+  libraries = 
+    c('forecast', 'caret', 'glmnet', 'pROC','tsfeatures','readxl','tidyverse','lubridate','doParallel', 'foreach')
   
   # parameters
   Engines = c('RF' ,'GBM','Lasso','peLasso')
   Targets = c('HICP') #'URATE','GDP'
 
   # estimate forecast combinations
-  foreach(i = 1:length(Targets), .combine = rbind) %:%
-    foreach(j = 1:length(Engines), .combine = rbind) %dopar%
+  foreach(i = 1:length(Targets), .combine = rbind, .packages = libraries) %:%
+    foreach(j = 1:length(Engines), .combine = rbind, .packages = libraries) %dopar%
        generateForecastWeights(target = Targets[i], Engine = Engines[j], repeats = 9)
 
   # turn off parallel backend 

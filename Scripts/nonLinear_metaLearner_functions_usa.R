@@ -1,6 +1,5 @@
 # File: nonLinear_metaLearner_functions_v0.R
 # Author: Tyler Pike
-# Section: MA-MFA
 # Date: 7/30/2019
 # Note(s):  Create forecast combinations for USA macro series
 
@@ -245,8 +244,15 @@ if(generateWeights == T){
   runMthVar = F
   runQtrVar = F
   
-  # set up parallel backend
-  doParallel::registerDoParallel(30)
+  # set up parallel backend 
+  n = parallel::detectCores()
+  cl =  parallel::makeCluster(n-2)
+  doParallel::registerDoParallel(cl)
+  
+  # package dependencies
+  libraries = 
+    c('forecast', 'caret', 'glmnet', 'pROC','tsfeatures','readxl','tidyverse','lubridate','doParallel', 'foreach')
+  
   
   # common parameters
   Engines = c('NN','RF' ,'GBM','peLasso','Lasso') 
@@ -259,9 +265,9 @@ if(generateWeights == T){
 
     # generate all TS forecasts
     if(runQtrVar == T){
-      foreach(i = 1:length(Targets), .combine = rbind) %:%
-        foreach(j = 1:length(Engines), .combine = rbind) %:%
-          foreach(k = 1:length(Horizons), .combine = rbind) %dopar%
+      foreach(i = 1:length(Targets), .combine = rbind, .packages = libraries) %:%
+        foreach(j = 1:length(Engines), .combine = rbind, .packages = libraries) %:%
+          foreach(k = 1:length(Horizons), .combine = rbind, .packages = libraries) %dopar%
              generateForecastWeights(target = Targets[i], Engine = Engines[j],
                                      Horizon = Horizons[k], repeats = 99)
     }
@@ -269,14 +275,14 @@ if(generateWeights == T){
   # Monthly Variables #
     # list of components
     Targets = c('itp','emp') 
-    Horizons = c(1,6,12,24
+    Horizons = c(1,6,12,24)
     Freq = 'Monthly'
     
     # generate all TS forecasts
     if(runMthVar == T){
-      foreach(i = 1:length(Targets), .combine = rbind) %:%
-        foreach(j = 1:length(Engines), .combine = rbind) %:%
-          foreach(k = 1:length(Horizons), .combine = rbind) %dopar%
+      foreach(i = 1:length(Targets), .combine = rbind, .packages = libraries) %:%
+        foreach(j = 1:length(Engines), .combine = rbind, .packages = libraries) %:%
+          foreach(k = 1:length(Horizons), .combine = rbind, .packages = libraries) %dopar%
               generateForecastWeights(target = Targets[i], Engine = Engines[j],
                                       Horizon = Horizons[k], repeats = 99)
     }
@@ -288,9 +294,9 @@ if(generateWeights == T){
 
     # generate all TS forecasts
     if(runWeekVar == T){
-      foreach(i = 1:length(Targets), .combine = rbind) %:%
-        foreach(j = 1:length(Engines), .combine = rbind) %:%
-          foreach(k = 1:length(Horizons), .combine = rbind) %dopar%
+      foreach(i = 1:length(Targets), .combine = rbind, .packages = libraries) %:%
+        foreach(j = 1:length(Engines), .combine = rbind, .packages = libraries) %:%
+          foreach(k = 1:length(Horizons), .combine = rbind, .packages = libraries) %dopar%
             generateForecastWeights(target = Targets[i], Engine = Engines[j],
                                     Horizon = Horizons[k], freq = 'weekly', repeats = 99)
     }

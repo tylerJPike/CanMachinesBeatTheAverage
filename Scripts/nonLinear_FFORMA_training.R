@@ -1,6 +1,5 @@
 # File: nonLinear_FFORMA_training.R
 # Author: Tyler Pike
-# Section: MA-MFA
 # Date: 10/1/2019
 # Note(s): Script to train FFORMA model. Currently configured to only use data from 1970 through 2000.   
 

@@ -1,6 +1,5 @@
 # File: nonLinear_data_functions_v0.R
 # Author: Tyler Pike
-# Section: MA-MFA
 # Date: 7/30/2019
 # Note(s): Data getter and setter functions
 
@@ -10,7 +9,7 @@
 #----------------------------------------------------
 getRecDates = function(){
   quantmod::getSymbols.FRED(c('USREC'), env = globalenv())
-  recession_m = data.frame(USREC, date = index(USREC)) %>% 
+  recession_m = data.frame(USREC, date = zoo::index(USREC)) %>% 
     filter(USREC >= 1)
   return(recession_m$date)
 }
@@ -52,11 +51,11 @@ createMacroData = function(){
   
   # 10-year treasury rate 
   quantmod::getSymbols.FRED('WGS10YR', env = globalenv())
-  treas = data.frame(First = WGS10YR, date = index(WGS10YR))
+  treas = data.frame(First = WGS10YR, date = zoo::index(WGS10YR))
 
   # oil
   quantmod::getSymbols.FRED('WCOILWTICO', env = globalenv())
-  oil = data.frame(First = WCOILWTICO, date = index(WCOILWTICO))
+  oil = data.frame(First = WCOILWTICO, date = zoo::index(WCOILWTICO))
 
   # package and return 
   list(rgdp = rgdp,
@@ -125,7 +124,7 @@ createEuroMacroData = function(){
   # import data
   # Harmonized Index of Consumer Prices: All Items for Euro area (19 countries)
   quantmod::getSymbols.FRED('CP0000EZ19M086NEST', env = globalenv())
-  hicp = data.frame(First = CP0000EZ19M086NEST, date = index(CP0000EZ19M086NEST))
+  hicp = data.frame(First = CP0000EZ19M086NEST, date = zoo::index(CP0000EZ19M086NEST))
   hicp = hicp %>% 
          rename(hicp = CP0000EZ19M086NEST) %>%
          mutate(hicp = 100*(hicp - lag(hicp,12))/lag(hicp,12)) %>% 
@@ -137,14 +136,14 @@ createEuroMacroData = function(){
   
   # Real Gross Domestic Product (Euro/ECU series) for Euro area (19 countries)
   quantmod::getSymbols.FRED('CLVMEURSCAB1GQEA19', env = globalenv())
-  gdp = data.frame(First = CLVMEURSCAB1GQEA19, date = index(CLVMEURSCAB1GQEA19))
+  gdp = data.frame(First = CLVMEURSCAB1GQEA19, date = zoo::index(CLVMEURSCAB1GQEA19))
   gdp = gdp %>% 
         rename(gdp = CLVMEURSCAB1GQEA19) %>% 
         mutate(gdp = 100*(gdp - lag(gdp,4))/lag(gdp,4))
   
   # Harmonized Unemployment Rate: Total: All Persons for the Euro Area 
   quantmod::getSymbols.FRED('LRHUTTTTEZQ156S', env = globalenv())
-  urate = data.frame(First = LRHUTTTTEZQ156S, date = index(LRHUTTTTEZQ156S))
+  urate = data.frame(First = LRHUTTTTEZQ156S, date = zoo::index(LRHUTTTTEZQ156S))
   urate = urate %>% 
           rename(urate = LRHUTTTTEZQ156S) 
   month(urate$date) = month(urate$date) + 1

@@ -1,6 +1,5 @@
 # File: nonLinear_metaLearner_functions_v0.R
 # Author: Tyler Pike
-# Section: MA-MFA
 # Date: 7/30/2019
 # Note(s): Use FFORMA to forecast US macro-series
 
@@ -170,8 +169,15 @@ if(generateWeights == T){
   runMthVar = T
   runQtrVar = F
   
-  # set up parallel backend
-  doParallel::registerDoParallel(30)
+  # set up parallel backend 
+  n = parallel::detectCores()
+  cl =  parallel::makeCluster(n-2)
+  doParallel::registerDoParallel(cl)
+  
+  # package dependencies
+  libraries = 
+    c('forecast', 'caret', 'glmnet', 'pROC','tsfeatures','readxl','tidyverse','lubridate','doParallel', 'foreach')
+  
   
   # Monthly Variables #
     # list of components
@@ -181,8 +187,8 @@ if(generateWeights == T){
     
     # generate all TS forecasts
     if(runMthVar == T){
-      foreach(i = 1:length(Targets), .combine = rbind) %:%
-          foreach(k = 1:length(Horizons), .combine = rbind) %do%
+      foreach(i = 1:length(Targets), .combine = rbind, .packages = libraries) %:%
+          foreach(k = 1:length(Horizons), .combine = rbind, .packages = libraries) %do%
             generateFformaForecasts(target = Targets[i], 
                                         Horizon = Horizons[k])
     }
