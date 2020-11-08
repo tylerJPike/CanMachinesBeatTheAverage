@@ -160,8 +160,10 @@ createEuroMacroData = function(){
 
 # --- get forecasts --- #
 createEuroSPFData = function(){
+  
   Files = list.files('./Data/EuroSPF/')
   HICP = GDP = URATE = list()
+  
   # loop through files
   for(file in Files){
     # import quarter data
@@ -171,36 +173,44 @@ createEuroSPFData = function(){
       select(date, forecaster, point_forecast) %>% 
       mutate(point_forecast = as.numeric(point_forecast)) %>% 
       filter(str_detect(date,'[[:alpha:]]'))
+    
     # define table rows
     hicpStart  = which(apply(rawTest,1, MARGIN = 2, FUN = grepl, pattern = 'HICP'))
     cinfStart  = which(apply(rawTest,1, MARGIN = 2, FUN = grepl, pattern = 'CORE'))-1
     gdpStart   = which(apply(rawTest,1, MARGIN = 2, FUN = grepl, pattern = 'REAL GDP'))-1
     urateStart = which(apply(rawTest,1, MARGIN = 2, FUN = grepl, pattern = 'UNEMPLOYMENT RATE'))-1
+
     # subset tables
     hicp  = rawTest[(hicpStart+2):(cinfStart-2),] 
     gdp   = rawTest[(gdpStart+3):(urateStart-2),]
     urate = rawTest[(urateStart+3):(nrow(rawTest)-1),]
+    
     # choose correct forecast horizon
     hicp  = hicp[!duplicated(hicp[,2]),]
     gdp   = gdp[!duplicated(gdp[,2]),]
     urate = urate[!duplicated(urate[,2]),]
+
     # create date objects
     hicp = mutate(hicp, date = lubridate::ymd(paste0(date,'01')))
-    gdp = mutate(gdp, date = as.Date(zoo::as.yearqtr(gdp$date, format = '%YQ%q')))
+    gdp = mutate(gdp, date = lubridate::ymd(paste0(substr(date,1,4),'-',as.numeric(substr(date,6,6))*3,'-01')))
     urate = mutate(urate, date = lubridate::ymd(paste0(date,'01')))
+
     # remove NA's 
     hicp = na.omit(hicp)
     gdp = na.omit(gdp)
     urate = na.omit(urate)
+    
     # cast from long to wide
     hicp = reshape2::dcast(hicp, form = date ~ forecaster, value.var = 'point_forecast')
     gdp = reshape2::dcast(gdp, form = date ~ forecaster, value.var = 'point_forecast')
     urate = reshape2::dcast(urate, form = date ~ forecaster, value.var = 'point_forecast')
+    
     # place dataframes in lists
     HICP[[file]] = hicp
     GDP[[file]] = gdp
     URATE[[file]] = urate
   }
+  
   # return data
   return(
     list(
